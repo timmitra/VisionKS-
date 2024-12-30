@@ -53,7 +53,9 @@ class ObjectDetectionViewModel: ObservableObject {
         //process the request.results
         if let results = request.results as?
           [VNRecognizedObjectObservation] {
-
+          let sortedResults = results
+            .sorted(by: { $0.confidence > $1.confidence })
+            .map { "\($0.labels.first?.identifier ?? "Unknown" ) - \((Int($0.confidence * 100)))%" }
         }
         self?.classification = ""
       }
