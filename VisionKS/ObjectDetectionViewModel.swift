@@ -48,16 +48,18 @@ class ObjectDetectionViewModel: ObservableObject {
     guard let image = photoPickerViewModel.selectedPhoto?.image, let cgImage = image.cgImage else {
       return
     }
-    let request = VNRecognizeAnimalsRequest { [weak self] request, error in
+    let request = VNClassifyImageRequest { [weak self] request, error in
       DispatchQueue.main.async {
         //process the request.results
         if let results = request.results as?
-          [VNRecognizedObjectObservation] {
+            [VNClassificationObservation] {
           let sortedResults = results
+            .filter { $0.confidence > 0.01 }
             .sorted(by: { $0.confidence > $1.confidence })
-            .map { "\($0.labels.first?.identifier ?? "Unknown" ) - \((Int($0.confidence * 100)))%" }
-          if let topResult = sortedResults.first {
-            self?.classification = topResult
+            .map { "\($0.identifier) - \((Int($0.confidence * 100)))%" }
+            .joined(separator: ", ")
+          if !sortedResults.isEmpty  {
+            self?.classification = sortedResults
           } else {
             self?.classification = "Unknown"
           }
@@ -68,9 +70,9 @@ class ObjectDetectionViewModel: ObservableObject {
     request.usesCPUOnly = true
 #endif
     //What animals does the model know about
-        if let animals = try? request.supportedIdentifiers() {
-          for animal in animals {
-            logger.debug("Animal: \(animal.rawValue)")
+        if let objects = try? request.supportedIdentifiers() {
+          for object in objects {
+            logger.debug("Object: \(object)")
           }
         }
     
