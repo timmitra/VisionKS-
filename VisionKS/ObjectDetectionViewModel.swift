@@ -68,11 +68,11 @@ class ObjectDetectionViewModel: ObservableObject {
     request.usesCPUOnly = true
 #endif
     //What animals does the model know about
-    //    if let animals = try? request.supportedIdentifiers() {
-    //      for animal in animals {
-    //        logger.debug("Animal: \(animal.rawValue)")
-    //      }
-    //    }
+        if let animals = try? request.supportedIdentifiers() {
+          for animal in animals {
+            logger.debug("Animal: \(animal.rawValue)")
+          }
+        }
     
     let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
     do {
