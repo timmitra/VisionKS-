@@ -32,6 +32,8 @@
 
 import SwiftUI
 import Vision
+import CoreImage
+import CoreImage.CIFilterBuiltins
 
 class TextDetectionViewModel: ObservableObject {
   @Published var textRectangles: [(CGRect, String)] = []
@@ -55,7 +57,12 @@ class TextDetectionViewModel: ObservableObject {
         print("Text detection error: \(error)")
         return
       }
-      self?.textRectangles = []
+      self?.textRectangles = request.results?.compactMap {
+        guard let observation = $0 as? VNRecognizedTextObservation,
+              let topCandidate = observation.topCandidates(1).first else { return nil }
+        return (observation.boundingBox, topCandidate.string)
+      } ?? []
+
       //Process the observations
     }
     
@@ -64,9 +71,21 @@ class TextDetectionViewModel: ObservableObject {
     textDetectionRequest.usesCPUOnly = true
 #endif
     guard let cgImage = image.cgImage else { return }
+    let ciImage = CIImage(cgImage: cgImage)
+    //let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+    let exposureAdjustFilter = CIFilter.exposureAdjust()
+    exposureAdjustFilter.inputImage = ciImage
+    exposureAdjustFilter.ev = 2.5
+    guard let exposureAdjustedImage = exposureAdjustFilter.outputImage
+      else { return }
     
-    let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
-    
+    let contrastAdjustFilter = CIFilter.colorControls()
+    contrastAdjustFilter.inputImage = exposureAdjustedImage
+    contrastAdjustFilter.contrast = 4
+    guard let processedImage = contrastAdjustFilter.outputImage else { return }
+
+    let handler = VNImageRequestHandler(ciImage: processedImage, options: [:])
+
     do {
       try handler.perform([textDetectionRequest])
     } catch {
