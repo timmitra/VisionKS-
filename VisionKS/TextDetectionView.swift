@@ -59,8 +59,11 @@ struct TextDetectionView: View {
             .padding()
             
             Button("Detect Text") {
-              viewModel.detectText()
-              viewModel.calculateMaxTextHeight()
+              // fix 'async' call in a function that does not support concurrency
+              Task {
+                await viewModel.detectText()
+                viewModel.calculateMaxTextHeight()
+              }
             }
             .padding()
             

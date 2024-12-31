@@ -47,28 +47,25 @@ class TextDetectionViewModel: ObservableObject {
     self.photoPickerViewModel = photoPickerViewModel
   }
   
-  @MainActor func detectText() {
+  @MainActor func detectText() async {
     currentIndex = 0
     
     guard let image = photoPickerViewModel.selectedPhoto?.image else { return }
     
-    let textDetectionRequest = VNRecognizeTextRequest { [weak self] request, error in
-      if let error = error {
-        print("Text detection error: \(error)")
-        return
-      }
-      self?.textRectangles = request.results?.compactMap {
-        guard let observation = $0 as? VNRecognizedTextObservation,
-              let topCandidate = observation.topCandidates(1).first else { return nil }
-        return (observation.boundingBox, topCandidate.string)
-      } ?? []
-
-      //Process the observations
-    }
+    let textDetectionRequest = VNRecognizeTextRequest()
     
     textDetectionRequest.recognitionLevel = .accurate
 #if targetEnvironment(simulator)
-    textDetectionRequest.usesCPUOnly = true
+    //textDetectionRequest.usesCPUOnly = true
+    let supportedDevices = try! textDetectionRequest
+      .supportedComputeStageDevices
+    if let mainStage = supportedDevices[.main] {
+      if let cpuDevice = mainStage.first(where: { device in
+        device.description.contains("CPU")
+        }) {
+          textDetectionRequest.setComputeDevice(cpuDevice, for: .main)
+      }
+    }
 #endif
     guard let cgImage = image.cgImage else { return }
     let ciImage = CIImage(cgImage: cgImage)
@@ -88,6 +85,18 @@ class TextDetectionViewModel: ObservableObject {
 
     do {
       try handler.perform([textDetectionRequest])
+      // process no text found
+      guard let results = textDetectionRequest.results else {
+        self.textRectangles = []
+        return
+      }
+      
+      self.textRectangles = results.compactMap { observation in
+        guard let topCandidate = observation.topCandidates(1).first
+          else { return nil }
+        return (observation.boundingBox, topCandidate.string)
+      }
+
     } catch {
       print("Failed to perform detection: \(error)")
     }
