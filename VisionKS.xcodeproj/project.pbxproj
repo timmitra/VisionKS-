@@ -12,6 +12,8 @@
 		18D775C722AD944400AE281E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18D775C622AD944400AE281E /* Assets.xcassets */; };
 		18D775CA22AD944400AE281E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18D775C922AD944400AE281E /* Preview Assets.xcassets */; };
 		18D775D822AD963800AE281E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18D775DA22AD963800AE281E /* LaunchScreen.storyboard */; };
+		2A49391B2D23B8A400A09B62 /* TextDetectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A49391A2D23B8A400A09B62 /* TextDetectionViewModel.swift */; };
+		2A49391C2D23B8A400A09B62 /* TextDetectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A4939192D23B8A400A09B62 /* TextDetectionView.swift */; };
 		D4445CC02C5A8E9D002CC20F /* ImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4445CBF2C5A8E9D002CC20F /* ImageViewModel.swift */; };
 		D4445CC22C5ADA63002CC20F /* ObjectDetectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4445CC12C5ADA63002CC20F /* ObjectDetectionViewModel.swift */; };
 		D4445CC42C5ADAA0002CC20F /* ObjectDetectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4445CC32C5ADAA0002CC20F /* ObjectDetectionView.swift */; };
@@ -27,6 +29,8 @@
 		18D775C922AD944400AE281E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		18D775CE22AD944400AE281E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		18D775DE22AD96B400AE281E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		2A4939192D23B8A400A09B62 /* TextDetectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextDetectionView.swift; sourceTree = "<group>"; };
+		2A49391A2D23B8A400A09B62 /* TextDetectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextDetectionViewModel.swift; sourceTree = "<group>"; };
 		D4445CBF2C5A8E9D002CC20F /* ImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewModel.swift; sourceTree = "<group>"; };
 		D4445CC12C5ADA63002CC20F /* ObjectDetectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectDetectionViewModel.swift; sourceTree = "<group>"; };
 		D4445CC32C5ADAA0002CC20F /* ObjectDetectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectDetectionView.swift; sourceTree = "<group>"; };
@@ -70,6 +74,8 @@
 				D4445CBF2C5A8E9D002CC20F /* ImageViewModel.swift */,
 				18D775C422AD944300AE281E /* FacesView.swift */,
 				D4445CC12C5ADA63002CC20F /* ObjectDetectionViewModel.swift */,
+				2A4939192D23B8A400A09B62 /* TextDetectionView.swift */,
+				2A49391A2D23B8A400A09B62 /* TextDetectionViewModel.swift */,
 				D4445CC32C5ADAA0002CC20F /* ObjectDetectionView.swift */,
 				D4E2108D2C66C43F0087EFB7 /* UIImage+Helpers.swift */,
 				D4E210B32C66D17E0087EFB7 /* PhotoPickerViewModel.swift */,
@@ -184,6 +190,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2A49391B2D23B8A400A09B62 /* TextDetectionViewModel.swift in Sources */,
+				2A49391C2D23B8A400A09B62 /* TextDetectionView.swift in Sources */,
 				D4E2108E2C66C43F0087EFB7 /* UIImage+Helpers.swift in Sources */,
 				18D775C522AD944300AE281E /* FacesView.swift in Sources */,
 				D4E210B42C66D17E0087EFB7 /* PhotoPickerViewModel.swift in Sources */,

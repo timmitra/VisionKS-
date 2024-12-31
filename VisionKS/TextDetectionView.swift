@@ -31,41 +31,49 @@
 /// THE SOFTWARE.
 
 import SwiftUI
-import PhotosUI
 
-@main
-struct FaceAndTextDetectionApp: App {
-  @StateObject private var photoPickerViewModel = PhotoPickerViewModel()
-  var body: some Scene {
-    WindowGroup {
-      NavigationView {
-        TabView {
-          FacesView(viewModel: .init(photoPickerViewModel: photoPickerViewModel))
-            .tabItem {
-              Label("Faces", systemImage: "face.smiling")
-            }
-          TextDetectionView(viewModel: .init(photoPickerViewModel: photoPickerViewModel))
-            .tabItem {
-              Label("Text", systemImage: "textformat")
-            }
-          ObjectDetectionView(viewModel: .init(photoPickerViewModel: photoPickerViewModel))
-            .tabItem {
-              Label("Animals", systemImage: "dog")
-            }
-        }.navigationTitle("Vision Demo")
-          .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-              PhotosPicker(
-                selection: $photoPickerViewModel.imageSelection,
-                matching: .images,
-                photoLibrary: .shared()
-              ) {
-                Image(systemName: "photo.on.rectangle.angled")
-                  .imageScale(.large)
-              }
-            }
+struct TextDetectionView: View {
+  @StateObject var viewModel: TextDetectionViewModel
+  
+  var body: some View {
+    NavigationStack {
+      VStack {
+        if let image = viewModel.photoPickerViewModel.selectedPhoto?.image.drawVisionRect(viewModel.currentText?.0) {
+          
+          Image(uiImage: image)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+          
+          Spacer()
+          if let (_, text) = viewModel.currentText {
+            Text(text)
+              .padding()
+              .frame(height: viewModel.maxTextHeight, alignment: .top)
+              .background(Color.clear)
           }
+          Spacer()
+          HStack {
+            Button("Previous") {
+              viewModel.previousText()
+            }
+            .padding()
+            
+            Button("Detect Text") {
+              viewModel.detectText()
+              viewModel.calculateMaxTextHeight()
+            }
+            .padding()
+            
+            Button("Next") {
+              viewModel.nextText()
+            }
+            .padding()
+          }
+        } else {
+          Text("No image available")
+        }
       }
     }
+    .padding()
   }
 }
